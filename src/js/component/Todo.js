@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // Todo Component
-function Todo({ todo, index, removeTodo }) {
+function Todo({ todo, index, removeTodo, label, done }) {
 	return (
 		<div className="todo my-3 bg-warning">
 			{todo.text}
@@ -19,6 +19,8 @@ function Todo({ todo, index, removeTodo }) {
 Todo.propTypes = {
 	todo: PropTypes.array,
 	index: PropTypes.number,
-	removeTodo: PropTypes.func
+	removeTodo: PropTypes.func,
+	done: PropTypes.string,
+	label: PropTypes.string
 };
 export default Todo;

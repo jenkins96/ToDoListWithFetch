@@ -44,8 +44,8 @@ export function Home() {
 		let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
 
 		const getFetch = fetch(url, {
-			method: "GET",
-			//	body: JSON.stringify(todos),
+			method: "PUT",
+			body: JSON.stringify(todos),
 			headers: {
 				"Content-Type": "application/json"
 			}
@@ -93,6 +93,8 @@ export function Home() {
 						index={index}
 						todo={todo}
 						removeTodo={removeTodo}
+						label={todo}
+						done="false"
 					/>
 				))}
 			</div>
