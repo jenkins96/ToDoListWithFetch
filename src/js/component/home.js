@@ -39,6 +39,21 @@ import Todo from "./Todo.js";
 
 // Component
 export function Home() {
+	let url = "https://assets.breatheco.de/apis/fake/todos/user/adrianjenkins";
+
+	const getTodos = async () => {
+		let res = await fetch(url);
+
+		if (res.status == 404) {
+			res = await fetch(url, {
+				method: "POST",
+				body: JSON.stringify(todos),
+				headers: { "Content-Type": "application/json" }
+			});
+		} else {
+			return res;
+		}
+	};
 	// Setting my "todos"  to an empty array
 	const [todos, setTodos] = useState([]);
 
@@ -68,6 +83,11 @@ export function Home() {
 					/>
 				))}
 			</div>
+			<button
+				className="btn btn-danger my-3 text-white"
+				onClick={() => setTodos([])}>
+				Clear Todos!
+			</button>
 		</div>
 	);
 }

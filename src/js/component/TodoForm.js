@@ -15,7 +15,7 @@ function TodoForm({ addTodo }) {
 		<form onSubmit={handleSubmit} className="">
 			<input
 				type="text"
-				className="input"
+				className="w-100 input-group"
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				placeholder="No tasks, add a task"
