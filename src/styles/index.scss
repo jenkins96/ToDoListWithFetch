@@ -11,3 +11,17 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+.todo {
+  align-items: center;
+  //background: #E4FBDF ;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+}
+.fa-trash{
+    color:white;
+}
