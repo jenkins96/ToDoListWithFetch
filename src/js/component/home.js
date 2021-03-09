@@ -1,51 +1,18 @@
-/*import React from "react";
-import Header from "./Header.js";
-import TodoForm from "./TodoForm.js";
-import Todo from "./Todo.js";
-
-//create your first component
-export function Home() {
-    // Setting my "todos"  to an empty array
-	const [todos, setTodos] = useState([]);
-
-	// Adding an element
-	const addTodo = text => {
-		const newTodos = [...todos, { text }];
-		setTodos(newTodos);
-	};
-	// Removing an element
-	const removeTodo = index => {
-		const newTodos = [...todos];
-		newTodos.splice(index, 1);
-		setTodos(newTodos);
-    return (
-		<div className="text-center mt-5">
-			<Header />
-            
-		</div>
-	);
-}
-*/
 // Importing
 import React, { useState, useEffect } from "react";
 import Header from "./Header.js";
 import TodoForm from "./TodoForm.js";
 import Todo from "./Todo.js";
 
-/* Strategy, I will create three Components:
-    Header: contains header
-    TodoForm: contains the form with an input
-    Todo: todo list
-*/
-
 // Component
 export function Home() {
 	useEffect(() => {
 		let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
 
+		// PARA REVISAR QUE ESTE LEYENDO LOS TODOS QUE YA ESTAN POR DEFECTO
 		const getFetch = fetch(url, {
-			method: "PUT",
-			body: JSON.stringify(todos),
+			method: "GET",
+			//body: JSON.stringify(todos),
 			headers: {
 				"Content-Type": "application/json"
 			}
@@ -58,8 +25,7 @@ export function Home() {
 			})
 			.then(data => {
 				//here is were your code should start after the fetch finishes
-
-				console.log(data); //this will print on the console the exact object received from the server
+				//console.log(data); //this will print on the console the exact object received from the server
 			})
 			.catch(error => {
 				//error handling
