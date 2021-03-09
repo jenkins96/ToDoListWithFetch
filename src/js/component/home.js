@@ -27,10 +27,11 @@ export function Home() {
 }
 */
 // Importing
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header.js";
 import TodoForm from "./TodoForm.js";
 import Todo from "./Todo.js";
+
 /* Strategy, I will create three Components:
     Header: contains header
     TodoForm: contains the form with an input
@@ -39,21 +40,33 @@ import Todo from "./Todo.js";
 
 // Component
 export function Home() {
-	let url = "https://assets.breatheco.de/apis/fake/todos/user/adrianjenkins";
+	useEffect(() => {
+		let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
 
-	const getTodos = async () => {
-		let res = await fetch(url);
+		const getFetch = fetch(url, {
+			method: "GET",
+			//	body: JSON.stringify(todos),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(resp => {
+				console.log(resp.ok); // will be true if the response is successfull
+				console.log(resp.status); // the status code = 200 or code = 400 etc.
+				console.log(resp.text()); // will try return the exact result as string
+				//return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+			})
+			.then(data => {
+				//here is were your code should start after the fetch finishes
 
-		if (res.status == 404) {
-			res = await fetch(url, {
-				method: "POST",
-				body: JSON.stringify(todos),
-				headers: { "Content-Type": "application/json" }
+				console.log(data); //this will print on the console the exact object received from the server
+			})
+			.catch(error => {
+				//error handling
+				console.log(error);
 			});
-		} else {
-			return res;
-		}
-	};
+	});
+
 	// Setting my "todos"  to an empty array
 	const [todos, setTodos] = useState([]);
 
