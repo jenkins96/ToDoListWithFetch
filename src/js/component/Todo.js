@@ -19,8 +19,6 @@ function Todo({ todo, index, removeTodo }) {
 Todo.propTypes = {
 	todo: PropTypes.string,
 	index: PropTypes.number,
-	removeTodo: PropTypes.func,
-	done: PropTypes.string,
-	label: PropTypes.string
+	removeTodo: PropTypes.func
 };
 export default Todo;
