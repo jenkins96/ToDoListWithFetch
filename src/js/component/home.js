@@ -9,28 +9,16 @@ export function Home() {
 	useEffect(() => {
 		let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
 
-		// PARA REVISAR QUE ESTE LEYENDO LOS TODOS QUE YA ESTAN POR DEFECTO
-		const getFetch = fetch(url, {
-			method: "GET",
-			//body: JSON.stringify(todos),
+		fetch(url, {
+			method: "GET", // or 'PUT'
+			//body: JSON.stringify(todos), // data can be `string` or {object}!
 			headers: {
 				"Content-Type": "application/json"
 			}
 		})
-			.then(resp => {
-				console.log(resp.ok); // will be true if the response is successfull
-				console.log(resp.status); // the status code = 200 or code = 400 etc.
-				console.log(resp.text()); // will try return the exact result as string
-				//return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
-			})
-			.then(data => {
-				//here is were your code should start after the fetch finishes
-				//console.log(data); //this will print on the console the exact object received from the server
-			})
-			.catch(error => {
-				//error handling
-				console.log(error);
-			});
+			.then(res => res.json())
+			.catch(error => console.error("Error:", error))
+			.then(response => console.log("Success:", response));
 	});
 
 	// Setting my "todos"  to an empty array
@@ -59,8 +47,6 @@ export function Home() {
 						index={index}
 						todo={todo}
 						removeTodo={removeTodo}
-						label={todo}
-						done="false"
 					/>
 				))}
 			</div>
