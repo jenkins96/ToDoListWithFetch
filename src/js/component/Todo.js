@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 function Todo({ todo, index, removeTodo }) {
 	return (
 		<div className="todo my-3 bg-warning">
-			{todo.text}
+			{todo}
 			<div>
 				<button
 					className="bg-primary"
@@ -17,7 +17,7 @@ function Todo({ todo, index, removeTodo }) {
 	);
 }
 Todo.propTypes = {
-	todo: PropTypes.object,
+	todo: PropTypes.string,
 	index: PropTypes.number,
 	removeTodo: PropTypes.func,
 	done: PropTypes.string,

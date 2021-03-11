@@ -6,28 +6,58 @@ import Todo from "./Todo.js";
 
 // Component
 export function Home() {
-	useEffect(() => {
-		let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
+	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
 
-		fetch(url, {
+	const getFetch = async () => {
+		await fetch(url, {
 			method: "GET", // or 'PUT'
-			//body: JSON.stringify(todos), // data can be `string` or {object}!
 			headers: {
 				"Content-Type": "application/json"
 			}
 		})
-			.then(res => res.json())
+			.then(res => {
+				return res.json();
+				//setTodos(res.json());
+			})
+			.then(response => setTodos(response))
+			.catch(error => console.error("Error:", error));
+	};
+	useEffect(() => {
+		getFetch();
+		//console.log(getFetch());
+	}, []);
+
+	const fetchPut = newArray => {
+		fetch(url, {
+			method: "PUT", // or 'PUT'
+			body: JSON.stringify(newArray), // data can be `string` or {object}!
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => {
+				if (res.status == 200) {
+					setTodos(newArray);
+				}
+			})
 			.catch(error => console.error("Error:", error))
 			.then(response => console.log("Success:", response));
-	});
+	};
 
 	// Setting my "todos"  to an empty array
 	const [todos, setTodos] = useState([]);
 
 	// Adding an element
 	const addTodo = text => {
-		const newTodos = [...todos, { text }];
-		setTodos(newTodos);
+		const newTodos = [
+			...todos,
+			{
+				label: text,
+				done: false
+			}
+		];
+		fetchPut(newTodos);
+		//setTodos(newTodos);
 	};
 	// Removing an element
 	const removeTodo = index => {
@@ -45,7 +75,7 @@ export function Home() {
 					<Todo
 						key={index}
 						index={index}
-						todo={todo}
+						todo={todo.label}
 						removeTodo={removeTodo}
 					/>
 				))}
