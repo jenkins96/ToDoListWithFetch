@@ -21,7 +21,7 @@ El boton "Clear Todos!" ya existe pero actualmente solo actualiza el "todo" en l
 
 // Component
 export function Home() {
-	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkas";
+	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkas44";
 
 	//  const method: GET
 	const getFetch = async () => {
@@ -34,7 +34,7 @@ export function Home() {
 			.then(res => {
 				return res.json();
 			})
-			//.then(response => setTodos(response)) //  response of server with initial todo list
+			.then(response => console.log(response)) //  response of server with initial todo list
 			.catch(error => console.error("Error:", error));
 	};
 
