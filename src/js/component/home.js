@@ -21,11 +21,11 @@ El boton "Clear Todos!" ya existe pero actualmente solo actualiza el "todo" en l
 
 // Component
 export function Home() {
-	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
+	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkas";
 
 	//  const method: GET
 	const getFetch = async () => {
-		await fetch(url, {
+		return await fetch(url, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json"
@@ -34,31 +34,77 @@ export function Home() {
 			.then(res => {
 				return res.json();
 			})
-			.then(response => setTodos(response)) //  response of server with initial todo list
+			//.then(response => setTodos(response)) //  response of server with initial todo list
 			.catch(error => console.error("Error:", error));
 	};
 
 	// UseEffect() runs one time with getFetch()
 	useEffect(() => {
-		getFetch();
+		//getFetch();
+		async function loadInitialItems() {
+			console.log("ENTREEEE");
+			await fetch(url, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json"
+				}
+			})
+				.then(res => {
+					console.log(res.status);
+					if (res.status == 200) {
+						return res.json();
+					} else {
+						// hacer POST []
+						return fetchPost();
+					}
+				})
+				.then(response => {
+					console.log(response);
+					setTodos(response);
+				}) //  response of server with initial todo list
+				.catch(error => console.error("Error:", error));
+		}
+		loadInitialItems();
 	}, []);
 
+	const fetchPost = async _ => {
+		console.log("ENTRE POST");
+		await fetch(url, {
+			method: "POST",
+			body: JSON.stringify([]),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => {
+				if (res.ok) {
+					console.log("LLAMANDO A GET");
+					return getFetch();
+				} else {
+					throw new Error("Comunicacion mala");
+				}
+			})
+			.catch(error => console.error("Error:", error));
+	};
+
 	//  const method: PUT
-	const fetchPut = newArray => {
-		fetch(url, {
+	const fetchPut = async newArray => {
+		await fetch(url, {
 			method: "PUT",
 			body: JSON.stringify(newArray),
 			headers: {
 				"Content-Type": "application/json"
 			}
 		})
-			.then(res => {
-				if (res.status == 200) {
-					setTodos(newArray);
+			.then(response => {
+				if (response.ok) {
+					return getFetch();
+				} else {
+					throw new Error("Comunicacion mala");
 				}
 			})
-			.catch(error => console.error("Error:", error))
-			.then(response => console.log("Success:", response));
+
+			.catch(error => console.error("Error:", error));
 	};
 
 	// Setting my "todos"  to an empty array
@@ -66,6 +112,8 @@ export function Home() {
 
 	// Adding an element
 	const addTodo = text => {
+		console.log(text);
+		console.log(todos);
 		const newTodos = [
 			...todos, // old array + object with properties server requires
 			{
@@ -74,6 +122,7 @@ export function Home() {
 			}
 		];
 		fetchPut(newTodos); // Calling fetchPut()
+		setTodos(newTodos);
 	};
 
 	// Removing an element
@@ -88,7 +137,7 @@ export function Home() {
 			<Header />
 			<TodoForm addTodo={addTodo} />
 			<div className="todo-list">
-				{todos.map((todo, index) => (
+				{(todos || []).map((todo, index) => (
 					<Todo
 						key={index}
 						index={index}
