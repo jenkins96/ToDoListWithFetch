@@ -5,17 +5,10 @@ import TodoForm from "./TodoForm.js";
 import Todo from "./Todo.js";
 
 /*
----------------------------------------------------------------------------------
-ESTEBAN, SIEMPRE DEJEME UN "TODO" EN LA LISTA XQ SI ME BORRA TODOS SE ME DESPICHA 
-YA QUE EL "POST" YO LO HICE DESDE POSTMAN.
----------------------------------------------------------------------------------
+
 PENDIENTES
 
-1) Si usuario no existe crear un POST con empty array para iniciar. Esto fue lo que hice desde el POSTMAN que debe hacerse desde aqui.
-
-2) Hacer un metodo: DELETE para eliminar todos los elementos de la lista, ojo este borra todo el "todo list" junto con el usuario,
-por lo que el primer pendiente es necesario. 
-El boton "Clear Todos!" ya existe pero actualmente solo actualiza el "todo" en la pagina, no realiza nada en el servidor.
+1) POST de array vacio para inicializar 
 
 */
 
@@ -35,6 +28,20 @@ export function Home() {
 				return res.json();
 			})
 			.then(response => setTodos(response)) //  response of server with initial todo list
+			.catch(error => console.error("Error:", error));
+	};
+
+	const deleteFetch = () => {
+		fetch(url, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(response => {
+				console.log(response);
+				setTodos([]);
+			})
 			.catch(error => console.error("Error:", error));
 	};
 
@@ -61,6 +68,17 @@ export function Home() {
 			.then(response => console.log("Success:", response));
 	};
 
+	/*const postFetch = () => {
+		fetch(url, {
+			method: "POST",
+			body: [],
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}).then(response => {
+			console.log(response);
+		});
+	};*/
 	// Setting my "todos"  to an empty array
 	const [todos, setTodos] = useState([]);
 
@@ -99,7 +117,7 @@ export function Home() {
 			</div>
 			<button
 				className="btn btn-danger my-3 text-white"
-				onClick={() => setTodos([])}>
+				onClick={deleteFetch}>
 				Clear Todos!
 			</button>
 		</div>
