@@ -16,19 +16,21 @@ PENDIENTES
 export function Home() {
 	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
 
-	//  const method: GET
-	const getFetch = async () => {
-		await fetch(url, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json"
+	/* -----------------------------------------------------------
+                            GET REQUEST
+    -------------------------------------------------------------*/
+	const getTodos = async () => {
+		try {
+			const response = await fetch(url);
+			if (response.ok) {
+				const jsonResponse = await response.json();
+				setTodos(jsonResponse);
+				return;
 			}
-		})
-			.then(res => {
-				return res.json();
-			})
-			.then(response => setTodos(response)) //  response of server with initial todo list
-			.catch(error => console.error("Error:", error));
+			throw new Error("Request has failed!");
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const deleteFetch = () => {
@@ -47,25 +49,29 @@ export function Home() {
 
 	// UseEffect() runs one time with getFetch()
 	useEffect(() => {
-		getFetch();
+		getTodos();
 	}, []);
 
-	//  const method: PUT
-	const fetchPut = newArray => {
-		fetch(url, {
-			method: "PUT",
-			body: JSON.stringify(newArray),
-			headers: {
-				"Content-Type": "application/json"
-			}
-		})
-			.then(res => {
-				if (res.status == 200) {
-					setTodos(newArray);
+	/* -----------------------------------------------------------
+                            PUT REQUEST
+    -------------------------------------------------------------*/
+	const putTodo = async newArray => {
+		try {
+			const response = await fetch(url, {
+				method: "PUT",
+				body: JSON.stringify(newArray),
+				headers: {
+					"Content-Type": "application/json"
 				}
-			})
-			.catch(error => console.error("Error:", error))
-			.then(response => console.log("Success:", response));
+			});
+			if (response.ok) {
+				setTodos(newArray);
+				return;
+			}
+			throw new Error("Request Failed!");
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	/*const postFetch = () => {
@@ -91,14 +97,14 @@ export function Home() {
 				done: false
 			}
 		];
-		fetchPut(newTodos); // Calling fetchPut()
+		putTodo(newTodos); // Calling fetchPut()
 	};
 
 	// Removing an element
 	const removeTodo = index => {
 		const newTodos = [...todos];
 		newTodos.splice(index, 1);
-		fetchPut(newTodos); // Calling fetchPut()
+		putTodo(newTodos); // Calling fetchPut()
 	};
 
 	return (
