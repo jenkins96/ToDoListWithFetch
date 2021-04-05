@@ -4,14 +4,6 @@ import Header from "./Header.js";
 import TodoForm from "./TodoForm.js";
 import Todo from "./Todo.js";
 
-/*
-
-PENDIENTES
-
-1) POST de array vacio para inicializar 
-
-*/
-
 // Component
 export function Home() {
 	let url = "https://assets.breatheco.de/apis/fake/todos/user/jenkins96";
@@ -33,24 +25,55 @@ export function Home() {
 		}
 	};
 
-	const deleteFetch = () => {
-		fetch(url, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json"
-			}
-		})
-			.then(response => {
-				console.log(response);
-				setTodos([]);
-			})
-			.catch(error => console.error("Error:", error));
-	};
-
 	// UseEffect() runs one time with getFetch()
 	useEffect(() => {
 		getTodos();
 	}, []);
+
+	/* -----------------------------------------------------------
+                            POST REQUEST
+    -------------------------------------------------------------*/
+	const postTodo = async () => {
+		try {
+			const response = await fetch(url, {
+				method: "POST",
+				body: JSON.stringify([]),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			if (response.ok) {
+				const jsonResponse = await response.json();
+				console.log(jsonResponse);
+				return;
+			}
+			throw new Error("Request Failed!");
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	/* -----------------------------------------------------------
+                            DELETE REQUEST
+    -------------------------------------------------------------*/
+	const deleteTodos = async () => {
+		try {
+			const response = await fetch(url, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+			if (response.ok) {
+				postTodo();
+				setTodos([]);
+				return;
+			}
+			throw new Error("Request Failed!");
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	/* -----------------------------------------------------------
                             PUT REQUEST
@@ -74,37 +97,26 @@ export function Home() {
 		}
 	};
 
-	/*const postFetch = () => {
-		fetch(url, {
-			method: "POST",
-			body: [],
-			headers: {
-				"Content-Type": "application/json"
-			}
-		}).then(response => {
-			console.log(response);
-		});
-	};*/
 	// Setting my "todos"  to an empty array
 	const [todos, setTodos] = useState([]);
 
 	// Adding an element
 	const addTodo = text => {
 		const newTodos = [
-			...todos, // old array + object with properties server requires
+			...todos,
 			{
 				label: text,
 				done: false
 			}
 		];
-		putTodo(newTodos); // Calling fetchPut()
+		putTodo(newTodos);
 	};
 
 	// Removing an element
 	const removeTodo = index => {
 		const newTodos = [...todos];
 		newTodos.splice(index, 1);
-		putTodo(newTodos); // Calling fetchPut()
+		putTodo(newTodos);
 	};
 
 	return (
@@ -123,7 +135,7 @@ export function Home() {
 			</div>
 			<button
 				className="btn btn-danger my-3 text-white"
-				onClick={deleteFetch}>
+				onClick={deleteTodos}>
 				Clear Todos!
 			</button>
 		</div>
